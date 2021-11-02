@@ -27,6 +27,7 @@ console.table(listEndpoints(server))
 mongoose.connection.on("connected", () => {
     console.log("we're connected with MongoDB :]")
     server.listen(port, () => {
+      console.table(listEndpoints(server))
       console.log(`server 🏃‍♂️ on port ${port}`)
     })
 })

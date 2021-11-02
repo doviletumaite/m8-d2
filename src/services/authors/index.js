@@ -82,4 +82,16 @@ authorsRouter.post("/:id/posts", async (req, res, next)=> {
     }
 })
 
+// ******** Authentication ************
+
+authorsRouter.post("/registration", async (req,res, next) => {
+    try {
+        const newAuthor = new authorsModel(req.body)
+        const author = await newAuthor.save()
+        res.send(author)
+    } catch (error) {
+        next(error)  
+    }
+})
+
 export default authorsRouter
