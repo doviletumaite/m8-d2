@@ -1,5 +1,6 @@
 import express from "express"
 import createHttpError from "http-errors"
+import { authorization } from "../authorization/basic.js"
 import authorsModel from "./schema.js"
 const authorsRouter = express.Router()
 
@@ -12,14 +13,14 @@ authorsRouter.post("/", async (req,res, next) => {
         next(error)  
     }
 })
-authorsRouter.get("/", async (req,res, next) => {
-    try {
-        const authors = await authorsModel.find()
-        res.send(authors)
-    } catch (error) {
-        next(error) 
-    }
-})
+// authorsRouter.get("/", async (req,res, next) => {
+//     try {
+//         const authors = await authorsModel.find()
+//         res.send(authors)
+//     } catch (error) {
+//         next(error) 
+//     }
+// })
 authorsRouter.get("/:id", async (req,res, next) => {
     try {
         const author = await authorsModel.findById(req.params.id)
@@ -91,6 +92,15 @@ authorsRouter.post("/registration", async (req,res, next) => {
         res.send(author)
     } catch (error) {
         next(error)  
+    }
+})
+
+authorsRouter.get("/", authorization, async (req,res, next) => {
+    try {
+        const authors = await authorsModel.find()
+        res.send(authors)
+    } catch (error) {
+        next(error) 
     }
 })
 
