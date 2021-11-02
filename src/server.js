@@ -4,6 +4,7 @@ import mongoose  from "mongoose"
 import listEndpoints from "express-list-endpoints"
 import { badRequestHandler, genericErrorHandler, notFoundHandler } from "./errorHandler.js"
 import postsRouter from "./services/posts/index.js"
+import authorsRouter from "./services/authors/index.js"
 
 
 const server = express()
@@ -20,6 +21,7 @@ server.use(badRequestHandler)
 server.use(genericErrorHandler)
 
 server.use("/posts", postsRouter)
+server.use("/authors", authorsRouter)
 console.table(listEndpoints(server))
 
 mongoose.connection.on("connected", () => {

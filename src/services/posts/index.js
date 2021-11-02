@@ -68,4 +68,8 @@ postsRouter.delete("/:id", async (req, res, next) => {
     }
 })
 
+// ******** Authentication ************
+
+
+
 export default postsRouter
