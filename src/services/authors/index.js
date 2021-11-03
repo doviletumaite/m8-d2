@@ -1,5 +1,6 @@
 import express from "express"
 import createHttpError from "http-errors"
+import { AdminOnly } from "../authorization/admin.js"
 import { authorization } from "../authorization/basic.js"
 import authorsModel from "./schema.js"
 const authorsRouter = express.Router()
@@ -13,14 +14,46 @@ authorsRouter.post("/", async (req,res, next) => {
         next(error)  
     }
 })
-// authorsRouter.get("/", async (req,res, next) => {
-//     try {
-//         const authors = await authorsModel.find()
-//         res.send(authors)
-//     } catch (error) {
-//         next(error) 
-//     }
-// })
+
+// ******** Authentication ************
+
+authorsRouter.get("/me", authorization, async (req, res, next) => {
+    try {
+        res.send(req.author)
+        console.log(req.author)
+    } catch (error) {
+        next(createHttpError(404, `not found`)) 
+    }
+})
+authorsRouter.put("/me", authorization, async (req,res, next) => {
+    try {
+        req.author.body= {...req.body}
+        const newAuthor = await req.author.save()
+        res.send(newAuthor)
+    } catch (error) {
+        next(error) 
+    }
+})
+authorsRouter.delete("/me", authorization, AdminOnly, async (req,res, next) => {
+    try {
+        await req.author.deleteOne()
+        res.send("ok")
+    } catch (error) {
+        next(error) 
+    }
+})
+
+// *******************************************************************************************
+
+authorsRouter.get("/", async (req,res, next) => {
+    try {
+        const authors = await authorsModel.find()
+        res.send(authors)
+    } catch (error) {
+        next(error) 
+    }
+})
+
 authorsRouter.get("/:id", async (req,res, next) => {
     try {
         const author = await authorsModel.findById(req.params.id)
@@ -104,31 +137,5 @@ authorsRouter.get("/", authorization, async (req, res, next) => {
     }
 })
 
-authorsRouter.get("/me", authorization, async (req, res, next) => {
-    try {
-        // const author = req.author
-        // console.log(author)
-        res.send(req.author)
-        // console.log(req.author)
-    } catch (error) {
-        next(createHttpError(404, `not found`)) 
-    }
-})
-authorsRouter.put("/me", authorization, async (req,res, next) => {
-    try {
-        // req.author.body= {...req.body}
-        // await req.author.save()
-        // res.send()
-    } catch (error) {
-        next(error) 
-    }
-})
-authorsRouter.delete("/me", authorization, async (req,res, next) => {
-    try {
-        await req.author.deleteOne()
-        res.send
-    } catch (error) {
-        next(error) 
-    }
-})
+
 export default authorsRouter
