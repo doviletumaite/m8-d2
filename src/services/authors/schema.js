@@ -33,7 +33,19 @@ export  const authorsSchema = new Schema({
     return authorObj
     }
 
-    authorsSchema.static.checkCredential  = function(name, password){
-
+    authorsSchema.statics.checkCredentials  = async function(name, plainPW){
+     const author = await this.findOne({name})
+     console.log("author", author)
+     if(author){
+         const authorMatch = await bcrypt.compare(plainPW, author.password)
+          console.log("authorMatch",authorMatch )
+         if(authorMatch){
+           return author
+         } else {
+           return null
+         }
+     } else{
+        return null
+     }
     }
 export default model( "author", authorsSchema)

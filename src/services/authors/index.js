@@ -104,4 +104,32 @@ authorsRouter.get("/", authorization, async (req,res, next) => {
     }
 })
 
+authorsRouter.get("/me", authorization, async (req,res, next) => {
+    try {
+        console.log("we")
+        // const author = req.author
+        // console.log(author)
+        // res.send(req.author)
+        // console.log(req.author)
+    } catch (error) {
+        next(createHttpError(404, `Author with id ${req.params.id} doesn't exist`)) 
+    }
+})
+authorsRouter.put("/me", authorization, async (req,res, next) => {
+    try {
+        req.author.body= {...req.body}
+        await req.author.save()
+        res.send()
+    } catch (error) {
+        next(error) 
+    }
+})
+authorsRouter.delete("/me", authorization, async (req,res, next) => {
+    try {
+        await req.author.deleteOne()
+        res.send
+    } catch (error) {
+        next(error) 
+    }
+})
 export default authorsRouter

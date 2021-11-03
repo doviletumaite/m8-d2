@@ -11,7 +11,16 @@ export const authorization = async (req, res, next) => {
         console.log(atob(req.headers.authorization.split(" ")[1]))
         const decodedPW = atob(req.headers.authorization.split(" ")[1])
         const [name, password] = decodedPW.split(":")
-        await authorsModel.checkCredentials(name, password)
-      next()   
+        const author =  await authorsModel.checkCredentials(name, password)
+         console.log("author me", author)
+        if (author){
+          console.log("author me", author)
+          req.author = author
+         
+           next() 
+        }
+       else{
+         next(createHttpError(401, "something wrong in your credentiuals :/"))
+       }
     }
 }
