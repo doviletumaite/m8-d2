@@ -8,7 +8,8 @@ export  const authorsSchema = new Schema({
      country: {type: String, required: true},
      bio: {type: String, required: true},
      password:{type: String, required: true},
-     posts: {type: Schema.Types.ObjectId, ref: "posts"}
+     posts: {type: Schema.Types.ObjectId, ref: "posts"},
+     role: { type: String, default: "User", enum:["User", "Admin"]}
     },
     {
         timestamps:true

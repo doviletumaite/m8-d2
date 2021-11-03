@@ -95,7 +95,7 @@ authorsRouter.post("/registration", async (req,res, next) => {
     }
 })
 
-authorsRouter.get("/", authorization, async (req,res, next) => {
+authorsRouter.get("/", authorization, async (req, res, next) => {
     try {
         const authors = await authorsModel.find()
         res.send(authors)
@@ -104,22 +104,21 @@ authorsRouter.get("/", authorization, async (req,res, next) => {
     }
 })
 
-authorsRouter.get("/me", authorization, async (req,res, next) => {
+authorsRouter.get("/me", authorization, async (req, res, next) => {
     try {
-        console.log("we")
         // const author = req.author
         // console.log(author)
-        // res.send(req.author)
+        res.send(req.author)
         // console.log(req.author)
     } catch (error) {
-        next(createHttpError(404, `Author with id ${req.params.id} doesn't exist`)) 
+        next(createHttpError(404, `not found`)) 
     }
 })
 authorsRouter.put("/me", authorization, async (req,res, next) => {
     try {
-        req.author.body= {...req.body}
-        await req.author.save()
-        res.send()
+        // req.author.body= {...req.body}
+        // await req.author.save()
+        // res.send()
     } catch (error) {
         next(error) 
     }
