@@ -32,4 +32,8 @@ export  const authorsSchema = new Schema({
     delete authorObj.__v
     return authorObj
     }
+
+    authorsSchema.static.checkCredential  = function(name, password){
+
+    }
 export default model( "author", authorsSchema)
