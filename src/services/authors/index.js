@@ -2,6 +2,7 @@ import express from "express"
 import createHttpError from "http-errors"
 import { AdminOnly } from "../authorization/admin.js"
 import { authorization } from "../authorization/basic.js"
+import { JWTAuthenticate } from "../authorization/tools.js"
 import authorsModel from "./schema.js"
 const authorsRouter = express.Router()
 
@@ -16,6 +17,24 @@ authorsRouter.post("/", async (req,res, next) => {
 })
 
 // ******** Authentication ************
+authorsRouter.post("/login", async(req, res, next) => {
+    try {
+        console.log("path", req.body)
+        const {name, password} = req.body
+        const author = await authorsModel.checkCredentials(name, password)
+        console.log("author",author )
+        if (author){
+            console.log("author if",author )  
+         const accessToken = await JWTAuthenticate(author)
+         console.log("token",accessToken)
+         res.send({accessToken})
+        } else {
+            next(createHttpError(401, `credentials not ok`))  
+        }
+    } catch (error) {
+        next(error)
+    }
+})
 
 authorsRouter.get("/me", authorization, async (req, res, next) => {
     try {

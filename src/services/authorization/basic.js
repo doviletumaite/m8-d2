@@ -19,7 +19,7 @@ export const authorization = async (req, res, next) => {
 
       next();
     } else {
-      next(createHttpError(401, "something wrong in your credentiuals :/"));
+      next(createHttpError(401, "something wrong in your credentials :/"));
     }
   }
 };
