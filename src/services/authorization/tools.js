@@ -15,6 +15,12 @@ export const JWTAuthenticate = async author => {
    }
 }))
 
+export const verifyJWT = token => new Promise ( (res, rej) => 
+jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
+    if (err) rej(err)
+    else res(decodedToken)
+})
+
 // generateJWT({})
 // .then(token=> console.log(token))
 // .catch(error => console.log(error))
