@@ -22,4 +22,15 @@ const authorizationRouter = express.Router();
    }
 })
 
+authorizationRouter.post("/registration", async (req,res, next) => {
+    try {
+        const newAuthor = await new authorsModel(req.body).save()
+        console.log("newAuthor",newAuthor)
+        const token = await generateJWT({_id: newAuthor._id})
+        res.send({newAuthor, token})
+    } catch (error) {
+        next(error)  
+    }
+})
+
 export default authorizationRouter
