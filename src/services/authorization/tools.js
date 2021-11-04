@@ -6,10 +6,10 @@ export const JWTAuthenticate = async author => {
     return accessToken
 }
 
- const generateJWT = payload => new Promise( (resolve, reject) =>
+export const generateJWT = payload => new Promise( (resolve, reject) =>
   jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1 week"}, (err, token) =>{
-   if(error){
-    reject(error)
+   if(err){
+    reject(err)
    }else {
     resolve(token)
    }
