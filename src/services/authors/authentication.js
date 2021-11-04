@@ -11,11 +11,11 @@ const authorizationRouter = express.Router();
     if (!name || !password){
      next(createHttpError(401, "bad credentials"))
     }
-    const author = authorsModel.checkCredentials(name, password)
+    const author = await authorsModel.checkCredentials(name, password)
     if (!author) {     
      next(createHttpError(401, "credentials not matching")) 
     }
-    const token = await generateJWT({author})
+    const token = await generateJWT({_id: author._id})
     res.status(200).send({token})
    } catch (error) {
        next(error)
