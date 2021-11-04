@@ -2,7 +2,7 @@ import express from "express"
 import createHttpError from "http-errors"
 import { AdminOnly } from "../authorization/admin.js"
 import { authorization } from "../authorization/basic.js"
-import { JWTAuthenticate } from "../authorization/tools.js"
+import { JWTAuthenticate, JwtMiddlewareCheck } from "../authorization/tools.js"
 import postsModel from "../posts/schema.js"
 import authorsModel from "./schema.js"
 const authorsRouter = express.Router()
@@ -63,7 +63,7 @@ authorsRouter.delete("/me", authorization, AdminOnly, async (req,res, next) => {
     }
 })
 
-authorsRouter.get("/me/stories", authorization, async (req, res, next) => {
+authorsRouter.get("/me/stories", JwtMiddlewareCheck, async (req, res, next) => {
     try {
         const posts = await postsModel.find({author: req.author._id.toString()})
         res.status(200).send(posts)
@@ -71,6 +71,7 @@ authorsRouter.get("/me/stories", authorization, async (req, res, next) => {
         next(createHttpError(404, `not found`)) 
     }
 })
+
 
 // *******************************************************************************************
 
