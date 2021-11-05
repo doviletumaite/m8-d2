@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken"
 import  authorsModel  from "../authors/schema.js"
 
 export const JWTAuthenticate = async author => {
-    const accessToken = await generateJWT({_id: author._id})
-    console.log("id", author._id)
+    const accessToken = await generateJWT({_id: author._id.toString()})
+    console.log("id", author._id.toString())
     return accessToken
 }
 
@@ -19,6 +19,8 @@ export const generateJWT = payload => new Promise( (resolve, reject) =>
 
 export const verifyJWT = token => new Promise ( (res, rej) => 
 jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
+    console.log("token passed through verifyJWT",token)
+    console.log("decodedToken",decodedToken)
     if (err) rej(err)
     else res(decodedToken)
 })
@@ -31,7 +33,9 @@ try {
         const token = req.headers.authorization.replace("Bearer", '')
         console.log("token", token)
         const decodedToken = await verifyJWT(token)
-        const author = authorsModel.findById(decodedToken.id)
+        const author = await authorsModel.findById(decodedToken.id)
+        console.log(decodedToken.id)
+        console.log("author", author)
         req.author = author
         next()
     }

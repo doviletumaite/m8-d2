@@ -15,7 +15,8 @@ const authorizationRouter = express.Router();
     if (!author) {     
      next(createHttpError(401, "credentials not matching")) 
     }
-    const token = await generateJWT({_id: author._id})
+    const token = await generateJWT({_id: author._id.toString()})
+    console.log({_id: author._id.toString()})
     res.status(200).send({token})
    } catch (error) {
        next(error)
@@ -26,7 +27,9 @@ authorizationRouter.post("/registration", async (req,res, next) => {
     try {
         const newAuthor = await new authorsModel(req.body).save()
         console.log("newAuthor",newAuthor)
-        const token = await generateJWT({_id: newAuthor._id})
+        const token = await generateJWT({_id: newAuthor._id.toString()})
+        console.log("id",{_id: newAuthor._id.toString()})
+
         res.send({newAuthor, token})
     } catch (error) {
         next(error)  
