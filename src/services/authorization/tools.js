@@ -26,7 +26,7 @@ jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
 })
 
 export const generateRefreshJWT = payload => new Promise( (resolve, reject) =>
-  jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1 week"}, (err, token) =>{
+  jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: "1 week"}, (err, token) =>{
    if(err){
     reject(err)
    }else {
@@ -35,7 +35,7 @@ export const generateRefreshJWT = payload => new Promise( (resolve, reject) =>
 }))
 
 export const verifyRefreshJWT = token => new Promise ( (res, rej) => 
-jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
+jwt.verify(token, process.env.JWT_REFRESH_SECRET), (err, decodedToken)=> {
     console.log("token passed through verifyJWT",token)
     if (err) rej(err)
     else res(decodedToken) 
