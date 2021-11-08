@@ -9,7 +9,8 @@ export  const authorsSchema = new Schema({
      bio: {type: String, required: true},
      password:{type: String, required: true},
      posts: {type: Schema.Types.ObjectId, ref: "posts"},
-     role: { type: String, default: "User", enum:["User", "Admin"]}
+     role: { type: String, default: "User", enum:["User", "Admin"]},
+     refreshToken: {type:String}
     },
     {
         timestamps:true

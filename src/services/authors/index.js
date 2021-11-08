@@ -26,9 +26,9 @@ authorsRouter.post("/login", async(req, res, next) => {
         console.log("author",author )
         if (author){
             console.log("author if",author )  
-         const accessToken = await JWTAuthenticate(author)
-         console.log("token",accessToken)
-         res.send({accessToken})
+         const {accessToken, refreshToken} = await JWTAuthenticate(author)
+         console.log("token",accessToken,refreshToken )
+         res.send({accessToken, refreshToken})
         } else {
             next(createHttpError(401, `credentials not ok`))  
         }
