@@ -6,6 +6,7 @@ export const JWTAuthenticate = async author => {
     const accessToken = await generateJWT({_id: author._id})
     const refreshToken = await generateRefreshJWT({_id: author._id})
     author.refreshToken = refreshToken
+    console.log("refresh ciaoooooooo", refreshToken)
     await author.save()
     return {accessToken , refreshToken}
 }
@@ -39,6 +40,7 @@ export const generateRefreshJWT = payload => new Promise( (resolve, reject) =>
 export const verifyRefreshJWT = token => new Promise ( (res, rej) => 
 jwt.verify(token, process.env.JWT_REFRESH_SECRET), (err, decodedToken)=> {
     console.log("token passed through verifyJWT",token)
+    console.log("token passed through JWT_REFRESH_SECRET",JWT_REFRESH_SECRET)
     if (err) rej(err)
     else res(decodedToken) 
     console.log("decodedToken",decodedToken)
