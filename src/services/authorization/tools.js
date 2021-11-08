@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken"
 import  authorsModel  from "../authors/schema.js"
 
 export const JWTAuthenticate = async author => {
-    const accessToken = await generateJWT({_id: author._id.toString()})
-    console.log("id", author._id.toString())
+    const accessToken = await generateJWT({_id: author._id})
+    const refreshToken = await generateRefreshJWT({_id: author._id})
     return accessToken
 }
 
