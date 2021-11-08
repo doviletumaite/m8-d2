@@ -20,11 +20,27 @@ export const generateJWT = payload => new Promise( (resolve, reject) =>
 export const verifyJWT = token => new Promise ( (res, rej) => 
 jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
     console.log("token passed through verifyJWT",token)
-    console.log("decodedToken",decodedToken)
     if (err) rej(err)
-    else res(decodedToken)
+    else res(decodedToken) 
+    console.log("decodedToken",decodedToken)
 })
 
+export const generateRefreshJWT = payload => new Promise( (resolve, reject) =>
+  jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: "1 week"}, (err, token) =>{
+   if(err){
+    reject(err)
+   }else {
+    resolve(token)
+   }
+}))
+
+export const verifyRefreshJWT = token => new Promise ( (res, rej) => 
+jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
+    console.log("token passed through verifyJWT",token)
+    if (err) rej(err)
+    else res(decodedToken) 
+    console.log("decodedToken",decodedToken)
+})
 export const JwtMiddlewareCheck =  async (req, res, next)  => {
 try {
     if(!req.headers.authorization) {
