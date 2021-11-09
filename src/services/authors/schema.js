@@ -32,6 +32,7 @@ export  const authorsSchema = new Schema({
     const authorObj = author.toObject()
     delete authorObj.password
     delete authorObj.__v
+    delete authorObj.refreshToken
     return authorObj
     }
 
