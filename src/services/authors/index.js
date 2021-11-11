@@ -2,7 +2,7 @@ import express from "express"
 import createHttpError from "http-errors"
 import { AdminOnly } from "../authorization/admin.js"
 import { authorization } from "../authorization/basic.js"
-import { JWTAuthenticate, JwtMiddlewareCheck } from "../authorization/tools.js"
+import { JWTAuthenticate, JwtMiddlewareCheck, verifyRefreshAndGenerate } from "../authorization/tools.js"
 import postsModel from "../posts/schema.js"
 import authorsModel from "./schema.js"
 const authorsRouter = express.Router()
@@ -40,7 +40,10 @@ authorsRouter.post("/login", async(req, res, next) => {
 authorsRouter.post("/refreshToken", async (req, res, next) =>{
     try {
         const {currentRefreshToken} = req.body
-        
+       
+        const {accessToken, refreshToken} = await verifyRefreshAndGenerate(currentRefreshToken)
+         console.log(currentRefreshToken)
+        res.send({accessToken, refreshToken})
     } catch (error) {
         next(error)
     }

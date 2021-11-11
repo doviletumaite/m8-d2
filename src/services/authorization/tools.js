@@ -29,7 +29,7 @@ jwt.verify(token, process.env.JWT_SECRET), (err, decodedToken)=> {
 })
 
 export const generateRefreshJWT = payload => new Promise( (resolve, reject) =>
-  jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: "1 week"}, (err, token) =>{
+  jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: "15 min"}, (err, token) =>{
    if(err){
     reject(err)
    }else {
@@ -62,6 +62,19 @@ try {
 } catch (error) {
     next(error)
 }
+}
+
+export const verifyRefreshAndGenerate = async actualRefresh => {
+   const decodedRefresh =  await verifyRefreshJWT(actualRefresh)
+   console.log(actualRefresh)
+   const author = await authorsModel.findById(decodedRefresh._id)
+   if(!user) throw createHttpError(404, 'user not found :[')
+   if(user.refreshToken && user.refreshToken === actualRefresh){
+   const {accessToken, refreshToken} = await JWTAuthenticate(author)
+   console.log("heloo")
+   console.log(author)
+   return {accessToken, refreshToken}
+   } else throw createHttpError(401, 'refresh token not valid :[')
 }
 
 // generateJWT({})
