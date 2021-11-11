@@ -49,6 +49,16 @@ authorsRouter.post("/refreshToken", async (req, res, next) =>{
     }
 })
 
+authorsRouter.post("/logout", async (req, res, next) =>{
+    try {
+       req.author.refreshToken = null
+       await req.user.save()
+       res.send()
+    } catch (error) {
+        next(error)
+    }
+})
+
 authorsRouter.get("/me", authorization, async (req, res, next) => {
     try {
         res.send(req.author)
