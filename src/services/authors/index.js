@@ -37,6 +37,15 @@ authorsRouter.post("/login", async(req, res, next) => {
     }
 })
 
+authorsRouter.post("/refreshToken", async (req, res, next) =>{
+    try {
+        const {currentRefreshToken} = req.body
+        
+    } catch (error) {
+        next(error)
+    }
+})
+
 authorsRouter.get("/me", authorization, async (req, res, next) => {
     try {
         res.send(req.author)
